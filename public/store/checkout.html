@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra | Expendio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/store/css/store.css">
+    <style>
+        .payment-method {
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .payment-method:hover { border-color: var(--primary-color); background: rgba(255,255,255,0.05); }
+        .payment-method input:checked + .method-content { color: var(--secondary-color); }
+        .payment-method.active { border-color: var(--secondary-color); background: rgba(16, 185, 129, 0.1); }
+    </style>
+</head>
+<body>
+
+    <main class="container py-5">
+        <!-- Steps -->
+        <div class="checkout-steps">
+            <div class="step active" id="step-1-head">
+                <div class="step-number">1</div>
+                <div class="small fw-bold">Datos</div>
+            </div>
+            <div class="step" id="step-2-head">
+                <div class="step-number">2</div>
+                <div class="small fw-bold">Pago</div>
+            </div>
+            <div class="step" id="step-3-head">
+                <div class="step-number">3</div>
+                <div class="small fw-bold">Confirmar</div>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <div class="product-card p-4">
+                    <!-- Step 1: Datos -->
+                    <div id="step-1" class="fadeIn">
+                        <h4 class="fw-bold mb-4">Información del Cliente</h4>
+                        <div id="user-info-box" class="mb-4 d-none">
+                            <div class="alert alert-info bg-dark border-info text-white rounded-4">
+                                <i class="fa-solid fa-user-check me-2"></i> Comprando como: <strong id="logged-user-name"></strong>
+                            </div>
+                        </div>
+                        <form id="checkout-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label opacity-75">Nombre(s)</label>
+                                    <input type="text" name="nombre" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label opacity-75">Apellidos</label>
+                                    <input type="text" name="apellidos" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label opacity-75">Correo Electrónico</label>
+                                    <input type="email" name="email" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label opacity-75">Teléfono</label>
+                                    <input type="tel" name="telefono" class="form-control" required>
+                                </div>
+                                <div class="col-12 mt-4 text-end">
+                                    <button type="button" class="btn-add w-auto px-5" id="next-to-2">SIGUIENTE <i class="fa-solid fa-chevron-right ms-2"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 2: Pago -->
+                    <div id="step-2" class="d-none fadeIn">
+                        <h4 class="fw-bold mb-4">Método de Pago</h4>
+                        <div class="d-flex flex-column gap-3 mb-4">
+                            <label class="payment-method active" data-method="Efectivo">
+                                <input type="radio" name="pago" value="Efectivo" checked hidden>
+                                <i class="fa-solid fa-money-bill-1 fs-3 text-success"></i>
+                                <div class="method-content">
+                                    <div class="fw-bold">Efectivo</div>
+                                    <div class="small opacity-50">Paga al recibir tu pedido</div>
+                                </div>
+                            </label>
+                            <label class="payment-method" data-method="Tarjeta">
+                                <input type="radio" name="pago" value="Tarjeta" hidden>
+                                <i class="fa-solid fa-credit-card fs-3 text-info"></i>
+                                <div class="method-content">
+                                    <div class="fw-bold">Tarjeta Crédito / Débito</div>
+                                    <div class="small opacity-50">Terminal física en la entrega</div>
+                                </div>
+                            </label>
+                            <label class="payment-method" data-method="Transferencia">
+                                <input type="radio" name="pago" value="Transferencia" hidden>
+                                <i class="fa-solid fa-building-columns fs-3 text-warning"></i>
+                                <div class="method-content">
+                                    <div class="fw-bold">Transferencia SPEI</div>
+                                    <div class="small opacity-50">Confirmación inmediata</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-link text-white text-decoration-none" id="back-to-1"><i class="fa-solid fa-chevron-left me-2"></i> Volver</button>
+                            <button type="button" class="btn-add w-auto px-5" id="next-to-3">REVISAR ORDEN <i class="fa-solid fa-chevron-right ms-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmar -->
+                    <div id="step-3" class="d-none fadeIn text-center py-4">
+                        <h4 class="fw-bold mb-4 text-start">Resumen Final</h4>
+                        <div class="mb-5">
+                            <i class="fa-solid fa-cart-check fs-1 text-info mb-4" style="font-size: 5rem !important;"></i>
+                            <h2 class="fw-bold" id="confirm-total">$0.00</h2>
+                            <p class="text-light opacity-50">Estás por confirmar tu pedido de <span id="confirm-count">0</span> productos.</p>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4 border-top pt-4">
+                            <button type="button" class="btn btn-link text-white text-decoration-none" id="back-to-2"><i class="fa-solid fa-chevron-left me-2"></i> Volver</button>
+                            <button type="button" class="btn-add w-auto px-5" id="btn-finalizar" style="background: linear-gradient(135deg, var(--secondary-color), #34D399)">
+                                CONFIRMAR PEDIDO <i class="fa-solid fa-check-double ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Summary -->
+            <div class="col-lg-4">
+                <div class="product-card p-4">
+                    <h5 class="fw-bold mb-4">Tu Pedido</h5>
+                    <div id="checkout-summary-list" class="mb-4">
+                        <!-- Dinámico -->
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 small opacity-50">
+                        <span>Envío</span>
+                        <span class="text-success">GRATIS</span>
+                    </div>
+                    <div class="d-flex justify-content-between fs-5 fw-bold text-info border-top pt-3">
+                        <span>Total</span>
+                        <span id="checkout-total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+      <div class="container">
+        <div class="row g-5 mb-5">
+          <div class="col-md-4">
+            <h4 class="logo-container mb-3" style="background:none; -webkit-text-fill-color:initial; color:#fff;">
+              <i class="fa-solid fa-bottle-water me-2 text-info"></i>EXPENDIO
+            </h4>
+            <p class="opacity-50 small">
+              Tu tienda de bebidas favorita. Refrescos, cervezas, vinos y más, 
+              siempre frescos y a tiempo.
+            </p>
+            <div class="d-flex gap-3 mt-3 fs-5">
+              <a href="#" class="text-light opacity-50 nav-btn">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+              <a href="#" class="text-light opacity-50 nav-btn">
+                <i class="fa-brands fa-facebook"></i>
+              </a>
+              <a href="#" class="text-light opacity-50 nav-btn">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <h6 class="fw-bold mb-3 opacity-75">Tienda</h6>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="/store/catalogo.html" 
+                  class="text-light opacity-50 text-decoration-none small">Catálogo</a></li>
+              <li class="mb-2"><a href="/store/catalogo.html?cat=Cervezas" 
+                  class="text-light opacity-50 text-decoration-none small">Cervezas</a></li>
+              <li class="mb-2"><a href="/store/catalogo.html?cat=Vinos" 
+                  class="text-light opacity-50 text-decoration-none small">Vinos</a></li>
+              <li class="mb-2"><a href="/store/catalogo.html?cat=Destilados" 
+                  class="text-light opacity-50 text-decoration-none small">Destilados</a></li>
+            </ul>
+          </div>
+          <div class="col-md-2">
+            <h6 class="fw-bold mb-3 opacity-75">Mi Cuenta</h6>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="/store/login.html" 
+                  class="text-light opacity-50 text-decoration-none small">Iniciar Sesión</a></li>
+              <li class="mb-2"><a href="/store/registro.html" 
+                  class="text-light opacity-50 text-decoration-none small">Registrarse</a></li>
+              <li class="mb-2"><a href="/store/perfil.html" 
+                  class="text-light opacity-50 text-decoration-none small">Mis Pedidos</a></li>
+              <li class="mb-2"><a href="/store/carrito.html" 
+                  class="text-light opacity-50 text-decoration-none small">Mi Carrito</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h6 class="fw-bold mb-3 opacity-75">Contacto</h6>
+            <div class="opacity-50 small">
+              <p class="mb-2">
+                <i class="fa-solid fa-phone me-2"></i>+52 871 000 0000
+              </p>
+              <p class="mb-2">
+                <i class="fa-solid fa-envelope me-2"></i>hola@expendiobebidas.mx
+              </p>
+              <p class="mb-2">
+                <i class="fa-solid fa-clock me-2"></i>Lun - Dom: 8:00am - 11:00pm
+              </p>
+              <p class="mb-2">
+                <i class="fa-solid fa-location-dot me-2"></i>Torreón, Coahuila, México
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="border-top pt-4" style="border-color: rgba(255,255,255,0.1) !important;">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <p class="text-muted small m-0">
+              © 2026 Expendio de Bebidas. Todos los derechos reservados.
+            </p>
+            <div class="d-flex gap-3">
+              <i class="fa-brands fa-cc-visa fs-4 opacity-25"></i>
+              <i class="fa-brands fa-cc-mastercard fs-4 opacity-25"></i>
+              <i class="fa-solid fa-money-bill-1 fs-4 opacity-25"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/store/js/models/CarritoModel.js"></script>
+    <script src="/store/js/models/ClienteModel.js"></script>
+    <script src="/store/js/models/VentaModel.js"></script>
+    <script src="/store/js/components/navbar.js"></script>
+    <script src="/store/js/components/toast.js"></script>
+    <script src="/store/js/views/CheckoutView.js"></script>
+    <script src="/store/js/controllers/CheckoutController.js"></script>
+</body>
+</html>

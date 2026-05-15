@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Expendio de Bebidas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/store/css/store.css">
+</head>
+<body>
+
+    <main class="container py-4">
+        <!-- Catalog Header -->
+        <div class="row align-items-center mb-4 g-3">
+            <div class="col-md-6">
+                <h2 class="fw-bold m-0">Catálogo</h2>
+            </div>
+            <div class="col-md-6">
+                <select class="form-select bg-dark text-white border-secondary rounded-pill px-4 py-2" id="ordenar">
+                    <option value="default">Ordenar por...</option>
+                    <option value="precio-asc">Precio: Menor a Mayor</option>
+                    <option value="precio-desc">Precio: Mayor a Menor</option>
+                    <option value="nombre-asc">Nombre: A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Categories Pill Scroll -->
+        <div class="category-scroller mb-4" id="category-pills">
+            <a href="#" class="cat-pill active" data-cat="all">Todos</a>
+            <a href="#" class="cat-pill" data-cat="Refrescos">Refrescos</a>
+            <a href="#" class="cat-pill" data-cat="Cervezas">Cervezas</a>
+            <a href="#" class="cat-pill" data-cat="Vinos">Vinos</a>
+            <a href="#" class="cat-pill" data-cat="Destilados">Destilados</a>
+            <a href="#" class="cat-pill" data-cat="Aguas">Aguas</a>
+            <a href="#" class="cat-pill" data-cat="Snacks">Snacks</a>
+        </div>
+
+        <!-- Results Info -->
+        <div id="results-count" class="mb-4 text-light opacity-75 small"></div>
+
+        <!-- Product Grid -->
+        <div class="row g-4" id="catalogo-grid">
+            <!-- Dinámico -->
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-info" role="status"></div>
+            </div>
+        </div>
+
+        <!-- Empty State (Hidden) -->
+        <div id="empty-state" class="text-center py-5 d-none fadeIn">
+            <i class="fa-solid fa-face-frown fs-1 text-light opacity-50 mb-3"></i>
+            <h4 class="text-light">No encontramos lo que buscas</h4>
+            <p class="text-muted">Intenta con otros términos o categorías.</p>
+            <button class="btn btn-outline-info rounded-pill px-4 mt-3" id="btn-limpiar">Limpiar filtros</button>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+      <div class="container">
+        <div class="row g-5 mb-5">
+          <div class="col-md-4">
+            <h4 class="logo-container mb-3" style="background:none; -webkit-text-fill-color:initial; color:#fff;">
+              <i class="fa-solid fa-bottle-water me-2 text-info"></i>EXPENDIO
+            </h4>
+            <p class="opacity-50 small">
+              Tu tienda de bebidas favorita. Refrescos, cervezas, vinos y más, 
+              siempre frescos y a tiempo.
+            </p>
+            <div class="d-flex gap-3 mt-3 fs-5">
+              <a href="#" class="text-light opacity-50 nav-btn">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+              <a href="#" class="text-light opacity-50 nav-btn">
+                <i class="fa-brands fa-facebook"></i>
+              </a>
+              <a href="#" class="text-light opacity-50 nav-btn">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <h6 class="fw-bold mb-3 opacity-75">Tienda</h6>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="/store/catalogo.html" 
+                  class="text-light opacity-50 text-decoration-none small">Catálogo</a></li>
+              <li class="mb-2"><a href="/store/catalogo.html?cat=Cervezas" 
+                  class="text-light opacity-50 text-decoration-none small">Cervezas</a></li>
+              <li class="mb-2"><a href="/store/catalogo.html?cat=Vinos" 
+                  class="text-light opacity-50 text-decoration-none small">Vinos</a></li>
+              <li class="mb-2"><a href="/store/catalogo.html?cat=Destilados" 
+                  class="text-light opacity-50 text-decoration-none small">Destilados</a></li>
+            </ul>
+          </div>
+          <div class="col-md-2">
+            <h6 class="fw-bold mb-3 opacity-75">Mi Cuenta</h6>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="/store/login.html" 
+                  class="text-light opacity-50 text-decoration-none small">Iniciar Sesión</a></li>
+              <li class="mb-2"><a href="/store/registro.html" 
+                  class="text-light opacity-50 text-decoration-none small">Registrarse</a></li>
+              <li class="mb-2"><a href="/store/perfil.html" 
+                  class="text-light opacity-50 text-decoration-none small">Mis Pedidos</a></li>
+              <li class="mb-2"><a href="/store/carrito.html" 
+                  class="text-light opacity-50 text-decoration-none small">Mi Carrito</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h6 class="fw-bold mb-3 opacity-75">Contacto</h6>
+            <div class="opacity-50 small">
+              <p class="mb-2">
+                <i class="fa-solid fa-phone me-2"></i>+52 871 000 0000
+              </p>
+              <p class="mb-2">
+                <i class="fa-solid fa-envelope me-2"></i>hola@expendiobebidas.mx
+              </p>
+              <p class="mb-2">
+                <i class="fa-solid fa-clock me-2"></i>Lun - Dom: 8:00am - 11:00pm
+              </p>
+              <p class="mb-2">
+                <i class="fa-solid fa-location-dot me-2"></i>Torreón, Coahuila, México
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="border-top pt-4" style="border-color: rgba(255,255,255,0.1) !important;">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <p class="text-muted small m-0">
+              © 2026 Expendio de Bebidas. Todos los derechos reservados.
+            </p>
+            <div class="d-flex gap-3">
+              <i class="fa-brands fa-cc-visa fs-4 opacity-25"></i>
+              <i class="fa-brands fa-cc-mastercard fs-4 opacity-25"></i>
+              <i class="fa-solid fa-money-bill-1 fs-4 opacity-25"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/store/js/models/ProductoModel.js"></script>
+    <script src="/store/js/models/CarritoModel.js"></script>
+    <script src="/store/js/components/navbar.js"></script>
+    <script src="/store/js/components/toast.js"></script>
+    <script src="/store/js/views/CatalogoView.js"></script>
+    <script src="/store/js/controllers/CatalogoController.js"></script>
+</body>
+</html>
